@@ -45,8 +45,8 @@ python main.py
 ## Usage
 
 `!rank <queue> <server>`
-- queue: solo,tft
-- server: euw1,na1,etc.
+- queue: solo,flex
+- server: euw,na,etc.
 
 ## Caching
 The bot caches API results to minimize the number of calls to the Riot Games API, thereby complying with rate limits.
