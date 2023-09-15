@@ -19,7 +19,7 @@ LPCutoff is a Discord bot built in Python to help you find out how many LPs are 
 ### Steps
 Clone the repository
 ```
-git clone https://github.com/yourusername/LeagueRankBot.git
+git clone https://github.com/jeanhadrien/discord-bot-lol-lp-cutoff
 ```
 
 Navigate to the project folder
