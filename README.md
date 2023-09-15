@@ -5,6 +5,8 @@
 
 LPCutoff is a Discord bot built in Python to help you find out how many LPs are needed to reach the Challenger or Grandmaster tiers in League of Legends.
 
+![Screenshot_2](https://github.com/jeanhadrien/discord-bot-lol-lp-cutoff/assets/40248338/70606be6-e438-4b08-a20b-507e363da32f)
+
 ## Features
 - !rank command to check LP cutoff
 - Supports all servers
