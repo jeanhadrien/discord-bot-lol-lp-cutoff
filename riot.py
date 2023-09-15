@@ -21,6 +21,14 @@ SERVERS = {
     "jp": "jp1",
     "kr": "kr",
     "eun": "eun1",
+    "la1":"la1",
+    "la2":"la2",
+    "la":"la1",
+    "oc":"oc1",
+    "ph":"ph2",
+    "ru":"ru",
+    "sg":"sg2",
+    "th":'th2',
 }
 
 
@@ -91,12 +99,3 @@ def parse_rank_data(all_players):
 
     return {"lps": lps, "gm_count": gm_count, "chall_count": chall_count}
 
-
-# Example usage
-if __name__ == "__main__":
-    from dotenv import load_dotenv
-
-    load_dotenv()
-    all_players = fetch_players_by_queue("euw1", "RANKED_SOLO_5x5")
-    sorted_league_points = parse_rank_data(all_players)
-    print(sorted_league_points[299])
