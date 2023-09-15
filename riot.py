@@ -9,11 +9,19 @@ API_RATE_LIMIT_MINUTE = 50
 QUEUES = {
     "solo": "RANKED_SOLO_5x5",
     "flex": "RANKED_FLEX_SR",
-    "tft": "RANKED_TFT",
 }
 
-SERVERS = ["br1", "eun1", "jp1", "kr", "na1", "euw1"]
 TIERS = ["challenger", "master", "grandmaster"]
+
+SERVERS = {
+    "br": "br1",
+    "euw": "euw1",
+    "eu": "euw1",
+    "na": "na1",
+    "jp": "jp1",
+    "kr": "kr",
+    "eun": "eun1",
+}
 
 
 @decorators.time_based_cache(timeout=API_CACHE_SECONDS)
@@ -21,12 +29,12 @@ TIERS = ["challenger", "master", "grandmaster"]
 @decorators.rate_limited(API_RATE_LIMIT_MINUTE, "minute")
 def fetch_players_by_page(server, queue, tier, page):
     if server.lower() not in SERVERS:
-        raise ValueError(f"Accepted servers : {','.join(SERVERS)}")
+        raise ValueError(f"Accepted servers : {', '.join(SERVERS.keys())}")
     if queue.lower() not in QUEUES:
-        raise ValueError(f"Accepted queues : {','.join(QUEUES.keys())}")
+        raise ValueError(f"Accepted queues : {', '.join(QUEUES.keys())}")
     if tier.lower() not in TIERS:
-        raise ValueError(f"Accepted tiers : {','.join(TIERS)}")
-    url = f"https://{server.lower()}.api.riotgames.com/lol/league-exp/v4/entries/{QUEUES[queue]}/{tier.upper()}/I?page={page}"
+        raise ValueError(f"Accepted tiers : {', '.join(TIERS)}")
+    url = f"https://{SERVERS[server]}.api.riotgames.com/lol/league-exp/v4/entries/{QUEUES[queue]}/{tier.upper()}/I?page={page}"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 OPR/101.0.0.0",
         "Accept-Language": "en-US,en;q=0.9",
@@ -36,7 +44,9 @@ def fetch_players_by_page(server, queue, tier, page):
     try:
         print(f"Fetching page {page} of {tier} in {queue} ({server})")
         resp = requests.get(url, headers=headers)
-        return resp.json()
+        result = resp.json()
+        print(len(result))
+        return result
     except Exception as error:
         print(f"{error}")
 
@@ -68,14 +78,18 @@ def fetch_players_by_queue(server, queue):
     return all_players
 
 
-def sort_and_extract_league_points(all_players):
+def parse_rank_data(all_players):
     # Sort the all_players list by the leaguePoints key in descending order
+    gm_count = sum(1 for d in all_players if "tier" in d and d["tier"] == "GRANDMASTER")
+    chall_count = sum(
+        1 for d in all_players if "tier" in d and d["tier"] == "CHALLENGER"
+    )
     sorted_players = sorted(all_players, key=lambda x: x["leaguePoints"], reverse=True)
 
     # Extract the leaguePoints from the sorted list into a new list
-    sorted_league_points = [player["leaguePoints"] for player in sorted_players]
+    lps = [player["leaguePoints"] for player in sorted_players]
 
-    return sorted_league_points
+    return {"lps": lps, "gm_count": gm_count, "chall_count": chall_count}
 
 
 # Example usage
@@ -84,5 +98,5 @@ if __name__ == "__main__":
 
     load_dotenv()
     all_players = fetch_players_by_queue("euw1", "RANKED_SOLO_5x5")
-    sorted_league_points = sort_and_extract_league_points(all_players)
+    sorted_league_points = parse_rank_data(all_players)
     print(sorted_league_points[299])
