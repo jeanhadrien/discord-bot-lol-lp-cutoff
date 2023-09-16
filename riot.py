@@ -47,7 +47,7 @@ def fetch_players_by_page(server, queue, tier, page):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 OPR/101.0.0.0",
         "Accept-Language": "en-US,en;q=0.9",
         "Accept-Charset": "application/x-www-form-urlencoded; charset=UTF-8",
-        "X-Riot-Token": os.environ["RIOT_API_KEY"],
+        "X-Riot-Token": os.getenv["RIOT_API_KEY"],
     }
     try:
         print(f"Fetching page {page} of {tier} in {queue} ({server})")

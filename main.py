@@ -55,4 +55,4 @@ def rank_message(data, server, queue):
 
 
 # Run the bot
-bot.run(os.environ["DISCORD_BOT_TOKEN"])
+bot.run(os.getenv["DISCORD_BOT_TOKEN"])
